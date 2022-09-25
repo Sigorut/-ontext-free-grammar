@@ -31,10 +31,7 @@ void MainWindow::get_rules()
     //qDebug()<<rules_map;
 }
 
-void MainWindow::get_term_symbols()
-{
-    term_symbols = ui->line_term->text().split(",");
-}
+
 
 void MainWindow::get_no_term_symbols()
 {
@@ -43,7 +40,6 @@ void MainWindow::get_no_term_symbols()
 void MainWindow::clear_data()
 {
     ui->line_no_term->clear();
-    ui->line_term->clear();
     ui->text_output->clear();
     ui->text_rules->clear();
     // ui->comboBox_first_symb->clear();
@@ -51,7 +47,6 @@ void MainWindow::clear_data()
 void MainWindow::lock_input(bool flag)
 {
     ui->line_no_term->setReadOnly(flag);
-    ui->line_term->setReadOnly(flag);
     ui->text_output->setReadOnly(flag);
     ui->text_rules->setReadOnly(flag);
     //ui->comboBox_first_symb->setEnabled(!flag);
@@ -85,7 +80,6 @@ void MainWindow::input_slot()
 void MainWindow::on_start_button_clicked()
 {
     get_no_term_symbols();
-    get_term_symbols();
     get_rules();
     max_size = ui->spinBox->value();
     symb_null = ui->radioButton_null->isChecked();
@@ -129,7 +123,7 @@ void MainWindow::generation_chains()
                     for (int i = 0; i < rule_variants.size(); i++){
                         chain = chains[0].left(num_word_chain);
                         chain +=  rule_variants[i];
-                        chain += chains[0].right(chains[0].size()-num_word_chain-1);
+                        chain += chains[0].rightRef(chains[0].size()-num_word_chain-1);
                         chains_next_step.push_back(chain);
 
                     }
@@ -146,7 +140,21 @@ void MainWindow::generation_chains()
             chains_next_step.clear();
         }
     }
+    if(ui->radioButton_null->isChecked()){
+        for(int i = 0; i < answer.size(); i++){
+            for(int j = 0; j < answer[i].size(); j++){
+                if(answer[i][j] == '~'){
+                    answer[i].remove(j,1);
+                    j--;
+                }
+            }
+        }
+    }
     qDebug() <<"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"<< answer;
+    answer.removeDuplicates();
+    for(int i = 0; i < answer.size(); i++){
+        ui->text_output->append(answer[i]);
+    }
 }
 MainWindow::~MainWindow()
 {

@@ -21,14 +21,12 @@ public:
 private:
     Ui::MainWindow *ui;
     void get_rules();
-    void get_term_symbols();
     void get_no_term_symbols();
     void generation_chains();
     void clear_data();
     void lock_input(bool flag);
 private:
     QStringList no_term_symbols;
-    QStringList term_symbols;
     QString first_rule_symb;
     QMultiMap<QString, QString> rules_map;
     bool symb_null;
