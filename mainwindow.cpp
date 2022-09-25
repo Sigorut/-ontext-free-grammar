@@ -28,6 +28,7 @@ void MainWindow::get_rules()
             }
         }
     }
+
     //qDebug()<<rules_map;
 }
 
@@ -36,6 +37,7 @@ void MainWindow::get_rules()
 void MainWindow::get_no_term_symbols()
 {
     no_term_symbols = ui->line_no_term->text().split(",");
+    no_term_symbols.removeDuplicates();
 }
 void MainWindow::clear_data()
 {
@@ -79,8 +81,20 @@ void MainWindow::input_slot()
 }
 void MainWindow::on_start_button_clicked()
 {
+    if(ui->line_no_term->text().isEmpty() || ui->text_rules->toPlainText().isEmpty()){
+        msgBox.setText("Нету ручек - нет конфеток...");
+        msgBox.exec();
+        return;
+    }
     get_no_term_symbols();
     get_rules();
+    for (int i = 0; i < no_term_symbols.size(); i++) {
+        if(!rules_map.uniqueKeys().contains(no_term_symbols[i]) || rules_map.uniqueKeys().size() != no_term_symbols.size()){
+            msgBox.setText("Ой! А что? А все.");
+            msgBox.exec();
+            return;
+        }
+    }
     max_size = ui->spinBox->value();
     symb_null = ui->radioButton_null->isChecked();
     ui->text_output->clear();

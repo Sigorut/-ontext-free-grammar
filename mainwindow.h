@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <QMultiMap>
 #include <QString>
+#include <QMessageBox>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -31,6 +33,7 @@ private:
     QMultiMap<QString, QString> rules_map;
     bool symb_null;
     short int max_size;
+    QMessageBox msgBox;
 private slots:
     void sample_slot();
     void input_slot();
